@@ -72,51 +72,16 @@ export default function Navbar() {
                 filter: 'drop-shadow(0 4px 12px rgba(178,34,34,0.25))',
               }}
             >
-              <svg 
-                width="100%" 
-                height="100%" 
-                viewBox="0 0 100 100" 
-                fill="none" 
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                {/* Outer Circular Globe */}
-                <circle 
-                  cx="50" cy="50" r="46" 
-                  stroke="#B22222" 
-                  strokeWidth="6" 
-                  strokeLinecap="round"
-                />
-                {/* Stylized 'ব' within the globe */}
-                <path 
-                  d="M25 35H75" 
-                  stroke="#B22222" 
-                  strokeWidth="8" 
-                  strokeLinecap="round"
-                />
-                <path 
-                  d="M71 35L35 75C35 75 25 80 25 70C25 60 55 45 55 45L71 35Z" 
-                  fill="#B22222"
-                />
-                <path 
-                  d="M71 35V85" 
-                  stroke="#B22222" 
-                  strokeWidth="8" 
-                  strokeLinecap="round"
-                />
-                {/* Decorative globe meridians (subtle) */}
-                <path 
-                  d="M50 4C50 4 65 25 65 50C65 75 50 96 50 96" 
-                  stroke="#B22222" 
-                  strokeWidth="2" 
-                  opacity="0.3"
-                />
-                <path 
-                  d="M50 4C50 4 35 25 35 50C35 75 50 96 50 96" 
-                  stroke="#B22222" 
-                  strokeWidth="2" 
-                  opacity="0.3"
-                />
-              </svg>
+              <Box
+                component="img"
+                src="/wb-emblem.png"
+                alt="West Bengal Emblem"
+                sx={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'contain',
+                }}
+              />
             </Box>
             <Box>
               <Typography

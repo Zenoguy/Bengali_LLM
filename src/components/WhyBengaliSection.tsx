@@ -2,29 +2,27 @@ import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
-import LanguageIcon from '@mui/icons-material/Language';
-import WarningAmberIcon from '@mui/icons-material/WarningAmber';
-import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
+import { ManuscriptScroll, FracturedChauMask, LotusPradip } from './BengaliIcons';
 import { useLang } from '../context/LanguageContext';
 import { motion } from 'framer-motion';
 
 const cards = [
   {
-    icon: LanguageIcon,
+    icon: ManuscriptScroll,
     titleKey: 'why_card_1_title',
     descKey: 'why_card_1_desc',
     accent: '#B22222', // Terracotta
     glow: 'rgba(178,34,34,0.1)',
   },
   {
-    icon: WarningAmberIcon,
+    icon: FracturedChauMask,
     titleKey: 'why_card_2_title',
     descKey: 'why_card_2_desc',
     accent: '#FFDB58', // Mustard
     glow: 'rgba(255,219,88,0.15)',
   },
   {
-    icon: AutoAwesomeIcon,
+    icon: LotusPradip,
     titleKey: 'why_card_3_title',
     descKey: 'why_card_3_desc',
     accent: '#002366', // Royal Blue
@@ -152,10 +150,10 @@ export default function WhyBengaliSection() {
                       },
                     }}
                   >
-                  <Box
+                   <Box
                     sx={{
-                      width: 60,
-                      height: 60,
+                      width: 64,
+                      height: 64,
                       borderRadius: 2.5,
                       background: `${card.glow}`,
                       border: `1px solid ${card.accent}20`,
@@ -165,7 +163,7 @@ export default function WhyBengaliSection() {
                       mb: 4,
                     }}
                   >
-                    <Icon sx={{ color: card.accent, fontSize: 30 }} />
+                    <Icon sx={{ width: 42, height: 42, color: card.accent }} />
                   </Box>
 
                   <Typography

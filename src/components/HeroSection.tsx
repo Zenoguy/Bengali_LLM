@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useMemo } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
@@ -23,22 +23,24 @@ interface FloatingChar {
 }
 
 function generateChars(count: number): FloatingChar[] {
-  return Array.from({ length: count }, (_, i) => ({
-    char: BENGALI_CHARS[i % BENGALI_CHARS.length],
+  return Array.from({ length: count }, () => ({
+    char: BENGALI_CHARS[Math.floor(Math.random() * BENGALI_CHARS.length)],
     x: Math.random() * 100,
-    yStart: 100 + Math.random() * 20,
-    delay: Math.random() * 5,
-    duration: 15 + Math.random() * 10,
-    size: 1.2 + Math.random() * 2.2,
-    opacity: 0.06 + Math.random() * 0.12,
+    yStart: 110, // Start below screen
+    delay: -(Math.random() * 25), // Negative delay for pre-distribution
+    duration: 18 + Math.random() * 12,
+    size: 0.8 + Math.random() * 2.5,
+    opacity: 0.05 + Math.random() * 0.12,
   }));
 }
 
-const chars = generateChars(24);
 
 export default function HeroSection() {
   const { t } = useLang();
   const heroRef = useRef<HTMLDivElement>(null);
+  
+  const chars = useMemo(() => generateChars(36), []);
+
 
   const scrollToResults = () => {
     document.querySelector('#results')?.scrollIntoView({ behavior: 'smooth' });
@@ -76,26 +78,53 @@ export default function HeroSection() {
       {chars.map((c, i) => (
         <motion.div
           key={i}
-          initial={{ y: '110vh', x: `${c.x}vw`, opacity: 0 }}
-          animate={{ y: '-10vh', opacity: c.opacity }}
+          initial={{ y: '110vh', x: `${c.x}vw`, opacity: 0, rotate: 0 }}
+          animate={{ 
+            y: '-15vh', 
+            opacity: [0, c.opacity, c.opacity, 0],
+            x: [`${c.x}vw`, `${c.x + (i % 2 === 0 ? 5 : -5)}vw`, `${c.x}vw`],
+            rotate: i % 2 === 0 ? 45 : -45
+          }}
           transition={{
-            duration: c.duration,
-            repeat: Infinity,
-            delay: c.delay,
-            ease: 'linear',
+            y: {
+              duration: c.duration,
+              repeat: Infinity,
+              delay: c.delay,
+              ease: 'linear',
+            },
+            opacity: {
+              duration: c.duration,
+              repeat: Infinity,
+              delay: c.delay,
+              times: [0, 0.2, 0.8, 1],
+              ease: 'linear',
+            },
+            x: {
+              duration: c.duration * 0.6,
+              repeat: Infinity,
+              ease: 'easeInOut',
+            },
+            rotate: {
+              duration: c.duration,
+              repeat: Infinity,
+              repeatType: 'reverse',
+              ease: 'easeInOut',
+            }
           }}
           style={{
             position: 'absolute',
             fontFamily: 'Hind Siliguri, sans-serif',
             fontSize: `${c.size}rem`,
-            color: i % 2 === 0 ? '#B22222' : '#FFDB58',
+            color: i % 3 === 0 ? '#B22222' : i % 3 === 1 ? '#FFDB58' : '#D32F2F',
             pointerEvents: 'none',
             zIndex: 0,
+            filter: 'blur(0.5px)',
           }}
         >
           {c.char}
         </motion.div>
       ))}
+
 
       <Container
         maxWidth="lg"
