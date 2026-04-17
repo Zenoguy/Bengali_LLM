@@ -11,17 +11,17 @@ Developed by the **CU Data Science Lab**, this project represents a significant 
 
 ---
 
-## ✨ Key Features
+## Key Features
 
-- 🧠 **Instruction-Tuned Intelligence**: Fine-tuned on **BanglaRQA** and proprietary instruction datasets covering real-world Bengali scenarios.
-- ⚡ **LoRA Optimized**: Leverages Low-Rank Adaptation (LoRA) and 4-bit quantization for high-performance inference even on consumer hardware.
-- 💬 **Premium Immersive UI**: A state-of-the-art "Maati & Shorshe" (Terracotta & Mustard) themed interface designed for maximum cultural immersion.
-- 📂 **Dynamic Session Management**: Persistent chat history with auto-naming based on conversation context.
-- 🌐 **Localized Experience**: Fully localized interface supporting both Bengali and English seamlessly.
+- **Instruction-Tuned Intelligence**: Fine-tuned on **BanglaRQA** and proprietary instruction datasets covering real-world Bengali scenarios.
+- **LoRA Optimized**: Leverages Low-Rank Adaptation (LoRA) and 4-bit quantization for high-performance inference even on consumer hardware.
+- **Premium Immersive UI**: A state-of-the-art "Maati & Shorshe" (Terracotta & Mustard) themed interface designed for maximum cultural immersion.
+- **Dynamic Session Management**: Persistent chat history with auto-naming based on conversation context.
+- **Localized Experience**: Fully localized interface supporting both Bengali and English seamlessly.
 
 ---
 
-## 🎨 Design Philosophy: "Maati & Shorshe"
+## Design Philosophy: "Maati & Shorshe"
 
 The interface is built on a custom design system that honors Bengal's heritage:
 - **Kora Off-White (`#F5F5DC`)**: Inspired by unbleached cotton (Kora) fabric.
@@ -30,7 +30,7 @@ The interface is built on a custom design system that honors Bengal's heritage:
 
 ---
 
-## 🛠️ Technology Stack
+## Technology Stack
 
 - **Core**: [React 19](https://react.dev/), [TypeScript](https://www.typescriptlang.org/)
 - **Build Tool**: [Vite 8](https://vitejs.dev/)
@@ -40,7 +40,7 @@ The interface is built on a custom design system that honors Bengal's heritage:
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 - Node.js (v18 or higher)
@@ -70,7 +70,7 @@ The interface is built on a custom design system that honors Bengal's heritage:
 
 ---
 
-## 📊 Evaluation Metrics
+## Evaluation Metrics
 
 Our model is rigorously tested across multiple dimensions:
 - **F1 Score**: For factual accuracy.
@@ -79,14 +79,14 @@ Our model is rigorously tested across multiple dimensions:
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 We welcome contributions from the community! Whether it's adding new datasets, improving the UI, or optimizing the model, feel free to open a Pull Request.
 
 ---
 
-## 📜 License
+## License
 
-This project is developed under the research initiatives of **CU Data Science Lab**. Please refer to the laboratory guidelines for commercial use case scenarios.
+This project is developed under the research initiatives of **Calcuta University Data Science Lab**. Please refer to the laboratory guidelines for commercial use case scenarios.
 
 ---
