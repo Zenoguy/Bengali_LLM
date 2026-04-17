@@ -158,7 +158,7 @@ export default function Footer() {
           }}
         >
           <Typography sx={{ color: '#4A4A4A', fontSize: '0.8rem', fontWeight: 500, fontFamily: 'Hind Siliguri, sans-serif' }}>
-            © 2024 Bengali LLM · {t('footer_rights')}
+            © 2026 Bengali LLM · {t('footer_rights')}
           </Typography>
           <Typography
             sx={{

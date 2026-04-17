@@ -2,6 +2,7 @@ import { useRef, useEffect, useState, useCallback } from 'react';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
+import Grid from '@mui/material/Grid';
 import Chip from '@mui/material/Chip';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import { useLang } from '../context/LanguageContext';
@@ -218,9 +219,7 @@ export default function ComparisonSection() {
   const [active, setActive] = useState(0);
 
   const containerVariants = {
-    hidden: { opacity: 0 },
     visible: {
-      opacity: 1,
       transition: { staggerChildren: 0.1 },
     },
   };
@@ -249,52 +248,76 @@ export default function ComparisonSection() {
       }}
     >
       <Container maxWidth="lg" sx={{ px: { xs: 2, md: 4 } }}>
-        <Box sx={{ textAlign: 'center', mb: 10 }}>
-          <motion.div variants={itemVariants}>
-            <Typography
-              variant="overline"
-              sx={{
-                color: '#B22222',
-                fontWeight: 800,
-                letterSpacing: '0.2em',
-                fontSize: '0.75rem',
-                display: 'block',
-                mb: 2.5,
-                fontFamily: 'Hind Siliguri, sans-serif',
-              }}
-            >
-              {t('comparison_section_label')}
-            </Typography>
-          </motion.div>
-          <motion.div variants={itemVariants}>
-            <Typography
-              variant="h2"
-              sx={{
-                fontSize: { xs: '2.4rem', md: '3.5rem' },
-                fontWeight: 900,
-                color: '#1C1C1C',
-                mb: 3,
-                lineHeight: 1.1,
-                fontFamily: 'Hind Siliguri, sans-serif',
-              }}
-            >
-              {t('comparison_title')}
-            </Typography>
-          </motion.div>
-          <motion.div variants={itemVariants}>
-            <Typography
-              sx={{
-                color: '#4A4A4A',
-                maxWidth: 600,
-                mx: 'auto',
-                fontSize: { xs: '1rem', md: '1.2rem' },
-                lineHeight: 1.6,
-                fontFamily: 'Hind Siliguri, sans-serif',
-              }}
-            >
-              {t('comparison_subtitle')}
-            </Typography>
-          </motion.div>
+        <Box sx={{ mb: 10 }}>
+          <Grid container spacing={4} alignItems="center">
+            <Grid size={{ xs: 12, md: 8 }}>
+              <Box sx={{ textAlign: { xs: 'center', md: 'left' } }}>
+                <motion.div variants={itemVariants}>
+                  <Typography
+                    variant="overline"
+                    sx={{
+                      color: '#B22222',
+                      fontWeight: 800,
+                      letterSpacing: '0.2em',
+                      fontSize: '0.75rem',
+                      display: 'block',
+                      mb: 2.5,
+                      fontFamily: 'Hind Siliguri, sans-serif',
+                    }}
+                  >
+                    {t('comparison_section_label')}
+                  </Typography>
+                </motion.div>
+                <motion.div variants={itemVariants}>
+                  <Typography
+                    variant="h2"
+                    sx={{
+                      fontSize: { xs: '2.4rem', md: '3.5rem' },
+                      fontWeight: 900,
+                      color: '#1C1C1C',
+                      mb: 3,
+                      lineHeight: 1.1,
+                      fontFamily: 'Hind Siliguri, sans-serif',
+                    }}
+                  >
+                    {t('comparison_title')}
+                  </Typography>
+                </motion.div>
+                <motion.div variants={itemVariants}>
+                  <Typography
+                    sx={{
+                      color: '#4A4A4A',
+                      maxWidth: 600,
+                      fontSize: { xs: '1rem', md: '1.2rem' },
+                      lineHeight: 1.6,
+                      fontFamily: 'Hind Siliguri, sans-serif',
+                    }}
+                  >
+                    {t('comparison_subtitle')}
+                  </Typography>
+                </motion.div>
+              </Box>
+            </Grid>
+            <Grid size={{ xs: 0, md: 4 }} sx={{ display: { xs: 'none', md: 'block' } }}>
+              <motion.div
+                initial={{ scale: 0.8, opacity: 0 }}
+                whileInView={{ scale: 1, opacity: 1 }}
+                transition={{ duration: 1 }}
+              >
+                <Box
+                  component="img"
+                  src="/machwala.png"
+                  alt="Cultural representative"
+                  sx={{
+                    width: '100%',
+                    maxWidth: 280,
+                    height: 'auto',
+                    borderRadius: '24px',
+                  }}
+                />
+              </motion.div>
+            </Grid>
+          </Grid>
         </Box>
 
         <Box
