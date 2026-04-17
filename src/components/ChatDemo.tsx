@@ -153,7 +153,9 @@ export default function ChatDemo() {
           <Grid size={{ xs: 12, md: 4.5 }}>
             <Box 
               component={motion.div}
-              variants={itemVariants}
+              initial={{ y: 30 }}
+              whileInView={{ y: 0 }}
+              transition={{ duration: 0.8 }}
               whileHover={{ scale: 1.02 }}
               sx={{ 
                 position: 'relative',
@@ -171,14 +173,12 @@ export default function ChatDemo() {
                   background: '#FFFFFF',
                   p: 4,
                   borderRadius: 6,
-                  border: '1px solid rgba(178,34,34,0.08)',
-                  boxShadow: '0 30px 60px rgba(0,0,0,0.05)',
+                  border: '1px solid rgba(178,34,34,0.15)',
                   position: 'relative',
-                  overflow: 'hidden',
                   transition: 'all 0.3s',
                   '&:hover': {
                     borderColor: '#B22222',
-                    boxShadow: '0 40px 80px rgba(178,34,34,0.1)',
+                    background: 'rgba(255,255,255,0.9)',
                   }
                 }}
               >
