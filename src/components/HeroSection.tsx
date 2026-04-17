@@ -60,8 +60,8 @@ export default function HeroSection() {
         justifyContent: 'center',
         overflow: 'hidden',
         background: '#F5F5DC url(/bhadrolok_cha_paper.png)',
-        backgroundSize: 'contain',
-        backgroundPosition: '-15% center',
+        backgroundSize: '38%',
+        backgroundPosition: '-5% center',
         backgroundRepeat: 'no-repeat',
         '&::before': {
           content: '""',
