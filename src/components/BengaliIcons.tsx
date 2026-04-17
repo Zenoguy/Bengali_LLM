@@ -97,3 +97,52 @@ export const LotusPradip = ({ sx }: IconProps) => (
     />
   </Box>
 );
+
+/**
+ * Premium Corner Alpana motif SVG.
+ * Intricate traditional Bengali design used for corner decorations.
+ */
+export const CornerAlpana = ({ sx }: IconProps) => (
+  <Box component="svg" viewBox="0 0 200 200" fill="none" sx={sx}>
+    {/* Large outer sweep */}
+    <path 
+      d="M20 0C20 100 100 180 200 180M0 20C100 20 180 100 180 200" 
+      stroke="currentColor" 
+      strokeWidth="2" 
+      strokeLinecap="round" 
+      opacity="0.6" 
+    />
+    
+    {/* Floral/Kalka elements */}
+    <path 
+      d="M0 60C40 60 70 30 70 0M60 0C60 40 30 70 0 70" 
+      stroke="currentColor" 
+      strokeWidth="3" 
+      strokeLinecap="round" 
+    />
+    <circle cx="45" cy="45" r="8" stroke="currentColor" strokeWidth="2" opacity="0.5" />
+    <circle cx="45" cy="45" r="3" fill="currentColor" />
+    
+    {/* Secondary curves */}
+    <path 
+      d="M0 120C60 120 110 70 110 0M120 0C120 60 70 110 0 110" 
+      stroke="currentColor" 
+      strokeWidth="2" 
+      strokeLinecap="round" 
+      opacity="0.4" 
+    />
+    
+    {/* Dotted accents */}
+    <circle cx="85" cy="85" r="4" fill="currentColor" opacity="0.3" />
+    <circle cx="115" cy="115" r="3" fill="currentColor" opacity="0.2" />
+    <circle cx="140" cy="140" r="2" fill="currentColor" opacity="0.1" />
+    
+    {/* Small inner floral detail */}
+    <path 
+      d="M0 30C15 30 25 20 25 10C25 0 15 0 10 0M30 0C30 15 20 25 10 25C0 25 0 15 0 10" 
+      stroke="currentColor" 
+      strokeWidth="1.5" 
+      opacity="0.8" 
+    />
+  </Box>
+);
