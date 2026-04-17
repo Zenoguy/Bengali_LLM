@@ -1,4 +1,4 @@
-# 🇧🇩 Bengali LLM: Authentic Intelligence for the Soul of Bengal
+# Bengali LLM: Authentic Intelligence for the Soul of Bengal
 
 [![Project Status: Active](https://img.shields.io/badge/Project%20Status-Active-brightgreen.svg)](https://github.com/Zenoguy/Bengali_LLM)
 [![Framework: React](https://img.shields.io/badge/Frontend-React%20%2B%20Vite-blue.svg)](https://reactjs.org/)
@@ -90,5 +90,3 @@ We welcome contributions from the community! Whether it's adding new datasets, i
 This project is developed under the research initiatives of **CU Data Science Lab**. Please refer to the laboratory guidelines for commercial use case scenarios.
 
 ---
-*Made with ❤️ for Bangladesh & West Bengal.*
-# Bengali_LLM
