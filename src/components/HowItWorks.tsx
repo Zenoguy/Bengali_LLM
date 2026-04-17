@@ -224,7 +224,7 @@ export default function HowItWorks() {
                     width: '120%',
                     maxWidth: 650,
                     height: 'auto',
-                    transform: 'scaleX(-1) scale(1.15)', // Flip and Zoom
+                    transform: 'scale(1.15)', // Zoom
                     borderRadius: '24px',
                     objectFit: 'contain',
                     mr: { md: -10 }, // Push into the corner
