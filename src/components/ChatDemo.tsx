@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
@@ -9,6 +10,56 @@ import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import { useLang } from '../context/LanguageContext';
 import { Link as RouterLink } from 'react-router-dom';
 import { motion } from 'framer-motion';
+
+const defaultText = "নমস্কার! আমি একটি বাংলা এআই। আপনাকে কীভাবে সাহায্য করতে পারি?";
+
+function TypewriterEffect({ text }: { text: string }) {
+  const [displayedText, setDisplayedText] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
+
+  useEffect(() => {
+    // Start typing after a short delay to ensure component is in view
+    const startTimeout = setTimeout(() => {
+      setIsTyping(true);
+    }, 800);
+
+    return () => clearTimeout(startTimeout);
+  }, []);
+
+  useEffect(() => {
+    if (!isTyping) return;
+    
+    let i = 0;
+    setDisplayedText('');
+    
+    const interval = setInterval(() => {
+      setDisplayedText(text.substring(0, i + 1));
+      i++;
+      if (i >= text.length) {
+        clearInterval(interval);
+        // Reset and retype after 5 seconds
+        setTimeout(() => {
+          setIsTyping(false);
+          setDisplayedText('');
+          setTimeout(() => setIsTyping(true), 500);
+        }, 5000);
+      }
+    }, 60);
+
+    return () => clearInterval(interval);
+  }, [text, isTyping]);
+
+  return (
+    <Typography sx={{ fontStyle: 'italic', color: '#666', fontSize: '1.1rem', fontFamily: 'Galada, cursive', opacity: 0.8, minHeight: '3.3rem' }}>
+      "{displayedText}"
+      <motion.span
+        animate={{ opacity: [1, 0, 1] }}
+        transition={{ repeat: Infinity, duration: 0.8 }}
+        style={{ display: 'inline-block', width: '4px', height: '1.1rem', background: '#B22222', marginLeft: '4px', verticalAlign: 'middle', opacity: isTyping ? 1 : 0 }}
+      />
+    </Typography>
+  );
+}
 
 export default function ChatDemo() {
   const { t, lang } = useLang();
@@ -197,9 +248,7 @@ export default function ChatDemo() {
                 </Box>
                 
                 <Box sx={{ background: 'rgba(0,0,0,0.02)', p: 3, borderRadius: 3, mb: 3 }}>
-                  <Typography sx={{ fontStyle: 'italic', color: '#666', fontSize: '1.1rem', fontFamily: 'Galada, cursive', opacity: 0.8 }}>
-                    "কেমন আছেন? আমি আপনাকে কীভাবে সাহায্য করতে পারি?"
-                  </Typography>
+                  <TypewriterEffect text={defaultText} />
                 </Box>
 
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
