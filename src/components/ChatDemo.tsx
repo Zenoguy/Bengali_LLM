@@ -139,7 +139,7 @@ export default function ChatDemo() {
                 <Typography
                   variant="h2"
                   sx={{
-                    fontSize: { xs: '2.4rem', md: '3.2rem' },
+                    fontSize: { xs: '2rem', md: '3.2rem' },
                     fontWeight: 900,
                     color: '#1C1C1C',
                     mb: 3,
@@ -157,7 +157,7 @@ export default function ChatDemo() {
                     color: '#4A4A4A',
                     maxWidth: 480,
                     mb: 6,
-                    fontSize: { xs: '1rem', md: '1.2rem' },
+                    fontSize: { xs: '0.95rem', md: '1.2rem' },
                     lineHeight: 1.6,
                     fontFamily: 'Hind Siliguri, sans-serif',
                   }}

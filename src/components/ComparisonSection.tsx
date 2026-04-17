@@ -122,7 +122,7 @@ function CompareSlider({ before, after }: {
             transition: dragging ? 'none' : 'width 0.15s ease',
           }}
         >
-          <Box sx={{ p: 4, minWidth: 300 }}>
+          <Box sx={{ p: { xs: 2, md: 4 }, minWidth: { xs: 240, md: 300 } }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2.5 }}>
               <Chip
                 label={t('comparison_before')}
@@ -154,7 +154,7 @@ function CompareSlider({ before, after }: {
         </Box>
 
         <Box sx={{ flex: 1, background: 'rgba(34,139,34,0.015)', minWidth: 0 }}>
-          <Box sx={{ p: 4, minWidth: 300 }}>
+          <Box sx={{ p: { xs: 2, md: 4 }, minWidth: { xs: 240, md: 300 } }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2.5 }}>
               <Chip
                 label={t('comparison_after')}

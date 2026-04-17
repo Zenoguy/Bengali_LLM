@@ -18,7 +18,7 @@ import SectionDivider from './components/SectionDivider';
 
 function LandingPage() {
   return (
-    <Box sx={{ background: '#F5F5DC', position: 'relative' }}>
+    <Box sx={{ background: '#F5F5DC', position: 'relative', overflowX: 'hidden' }}>
       <Navbar />
       <HeroSection />
       <SectionDivider type="alpana" />

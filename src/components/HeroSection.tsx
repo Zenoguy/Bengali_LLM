@@ -138,7 +138,7 @@ export default function HeroSection() {
           <Typography
             component="h1"
             sx={{
-              fontSize: { xs: '3.5rem', sm: '5rem', md: '6.5rem', lg: '7.5rem' },
+              fontSize: { xs: '2.8rem', sm: '4rem', md: '6.5rem', lg: '7.5rem' },
               fontWeight: 800,
               lineHeight: 1.05,
               letterSpacing: '-0.02em',
@@ -162,7 +162,7 @@ export default function HeroSection() {
             component="span"
             sx={{
               display: 'block',
-              fontSize: { xs: '2.8rem', sm: '4.5rem', md: '5.5rem', lg: '6.5rem' },
+              fontSize: { xs: '2.2rem', sm: '3.5rem', md: '5.5rem', lg: '6.5rem' },
               fontWeight: 700,
               lineHeight: 1.1,
               letterSpacing: '-0.01em',
