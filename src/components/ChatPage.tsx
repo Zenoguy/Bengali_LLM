@@ -470,7 +470,7 @@ export default function ChatPage() {
                 {isWakingUp && (
                   <motion.div initial={{ opacity: 0 }} animate={{ opacity: 0.7 }}>
                     <Typography sx={{ textAlign: 'center', fontSize: '0.8rem', color: '#B22222', fontWeight: 600, fontFamily: 'Hind Siliguri, sans-serif' }}>
-                      ⚡ {lang === 'bn' ? 'বাংলা মডেল জেগে উঠছে… (প্রথম অনুরোধে ~৩০ সেকেন্ড সময় নিতে পারে)' : 'Bengali model is waking up… (First request may take ~30s)'}
+                      ⚡ {lang === 'bn' ? 'এটি একটি ডেমো এবং CPU মডেল, তাই ৩ মিনিট পর্যন্ত সময় নিতে পারে' : 'This is a demo and CPU model, so it can take up to 3 mins.'}
                     </Typography>
                   </motion.div>
                 )}
