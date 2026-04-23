@@ -188,17 +188,9 @@ export default function ChatPage() {
     // Wake indicator timer
     const wakeUpTimer = setTimeout(() => setIsWakingUp(true), 3000);
 
-    // Context handling: Limit to last 6 messages for CPU performance
-    // Use sessions search to avoid stale activeSession snapshot
-    const currentSession = sessions.find(s => s.id === activeSessionId);
-    const history = currentSession?.messages
-      .slice(-6)
-      .map(m => `${m.role === 'user' ? 'user' : 'assistant'}: ${m.text}`)
-      .join('\n') || '';
+    const userPrompt = text;
 
-    const fullPrompt = `${history}\nuser: ${text}`;
-
-    // Timeout handling
+    // ⏱ Timeout handling
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 25000); // 25s timeout
 
@@ -208,7 +200,7 @@ export default function ChatPage() {
         headers: { 'Content-Type': 'application/json' },
         signal: controller.signal,
         body: JSON.stringify({
-          prompt: fullPrompt,
+          prompt: userPrompt,
           system_prompt: 'You are a Bengali-first assistant. Prefer Bengali unless user uses English.',
           max_new_tokens: 96,
           temperature: 0.7,
