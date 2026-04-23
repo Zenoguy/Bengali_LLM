@@ -146,6 +146,7 @@ export default function ChatPage() {
   const [activeSessionId, setActiveSessionId] = useState<string>(sessions[0]?.id || '');
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
+  const [isWakingUp, setIsWakingUp] = useState(false);
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   
   const chatEndRef = useRef<HTMLDivElement>(null);
@@ -162,16 +163,16 @@ export default function ChatPage() {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [activeSession?.messages, loading]);
 
-  const handleSend = useCallback((text: string) => {
+  const handleSend = useCallback(async (text: string) => {
     if (!text.trim() || loading || !activeSession) return;
     
     const userMsg: Message = { role: 'user', text };
     
+    // Update session with user message
     setSessions(prev => prev.map(s => {
       if (s.id === activeSessionId) {
         const newMessages = [...s.messages, userMsg];
         let newTitle = s.title;
-        // Generate title if it was default
         if (s.messages.length === 1 && (s.title === 'নতুন চ্যাট' || s.title === 'New Chat' || s.title === 'নতুন কথোপকথন')) {
           newTitle = text.slice(0, 25) + (text.length > 25 ? '...' : '');
         }
@@ -181,24 +182,73 @@ export default function ChatPage() {
     }));
 
     setInput('');
-    setLoading(true);
+    // 300ms delay to avoid flicker for fast responses
+    const loaderDelay = setTimeout(() => setLoading(true), 300);
+    
+    // Wake indicator timer
+    const wakeUpTimer = setTimeout(() => setIsWakingUp(true), 3000);
 
-    setTimeout(() => {
-      setLoading(false);
-      const aiMsg: Message = { 
-        role: 'ai', 
-        text: lang === 'bn' 
-          ? 'এটি একটি ডেমো সংস্করণ। শীঘ্রই আমি আপনার সব প্রশ্নের সঠিক এবং বিস্তারিত উত্তর দিতে সক্ষম হব। আমাদের সাথে থাকার জন্য ধন্যবাদ!' 
-          : 'This is a demo version. Soon I will be able to answer all your questions accurately and in detail. Thank you for staying with us!'
-      };
+    // Context handling: Limit to last 6 messages for CPU performance
+    // Use sessions search to avoid stale activeSession snapshot
+    const currentSession = sessions.find(s => s.id === activeSessionId);
+    const history = currentSession?.messages
+      .slice(-6)
+      .map(m => `${m.role === 'user' ? 'user' : 'assistant'}: ${m.text}`)
+      .join('\n') || '';
+
+    const fullPrompt = `${history}\nuser: ${text}`;
+
+    // Timeout handling
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 25000); // 25s timeout
+
+    try {
+      const res = await fetch('/api/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        signal: controller.signal,
+        body: JSON.stringify({
+          prompt: fullPrompt,
+          system_prompt: 'You are a Bengali-first assistant. Prefer Bengali unless user uses English.',
+          max_new_tokens: 96,
+          temperature: 0.7,
+          top_p: 0.9,
+        }),
+      });
+
+      if (!res.ok) {
+        throw new Error('API failed');
+      }
+
+      const data = await res.json();
+      
+      const aiText = data.response || data.generated_text || data.output || '⚠️ Empty response from model.';
 
       setSessions(prev => prev.map(s => {
         if (s.id === activeSessionId) {
-          return { ...s, messages: [...s.messages, aiMsg], timestamp: Date.now() };
+          return { ...s, messages: [...s.messages, { role: 'ai', text: aiText }], timestamp: Date.now() };
         }
         return s;
       }));
-    }, 1500);
+
+    } catch (err: any) {
+      const errorText = err.name === 'AbortError' 
+        ? (lang === 'bn' ? '⚠️ সময় শেষ হয়ে গেছে। মডেলটি সম্ভবত সক্রিয় হচ্ছে, আবার চেষ্টা করুন।' : '⚠️ Request timed out. Model may be waking up, please try again.')
+        : (lang === 'bn' ? '⚠️ মডেলে সংযোগ করা যাচ্ছে না। আবার চেষ্টা করুন।' : '⚠️ Failed to reach model. Try again.');
+
+      setSessions(prev => prev.map(s => {
+        if (s.id === activeSessionId) {
+          return { ...s, messages: [...s.messages, { role: 'ai', text: errorText }] };
+        }
+        return s;
+      }));
+    } finally {
+      clearTimeout(wakeUpTimer);
+      clearTimeout(timeoutId);
+      clearTimeout(loaderDelay);
+      setLoading(false);
+      setIsWakingUp(false);
+    }
   }, [loading, lang, activeSessionId, activeSession]);
 
   const startNewChat = () => {
@@ -420,8 +470,17 @@ export default function ChatPage() {
             </AnimatePresence>
             
             {loading && (
-              <Box sx={{ display: 'flex', justifyContent: 'flex-start', mb: 3 }}>
-                <ChaLoader />
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, mb: 3 }}>
+                <Box sx={{ display: 'flex', justifyContent: 'flex-start' }}>
+                  <ChaLoader />
+                </Box>
+                {isWakingUp && (
+                  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 0.7 }}>
+                    <Typography sx={{ textAlign: 'center', fontSize: '0.8rem', color: '#B22222', fontWeight: 600, fontFamily: 'Hind Siliguri, sans-serif' }}>
+                      ⚡ {lang === 'bn' ? 'বাংলা মডেল জেগে উঠছে… (প্রথম অনুরোধে ~৩০ সেকেন্ড সময় নিতে পারে)' : 'Bengali model is waking up… (First request may take ~30s)'}
+                    </Typography>
+                  </motion.div>
+                )}
               </Box>
             )}
             <div ref={chatEndRef} />
