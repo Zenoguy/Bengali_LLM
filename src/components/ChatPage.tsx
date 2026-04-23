@@ -202,8 +202,8 @@ export default function ChatPage() {
         signal: controller.signal,
         body: JSON.stringify({
           prompt: userPrompt,
-          system_prompt: 'You are a Bengali assistant. Answer concisely in 2-3 sentences. Prefer Bengali unless user uses English.',
-          max_new_tokens: 32,
+          system_prompt: 'You are a knowledgeable Bengali assistant. Give accurate and complete answers in Bengali. Answer in 3-5 clear sentences. Avoid incomplete responses. Prefer Bengali unless user uses English.',
+          max_new_tokens: 96,
           temperature: 0.7,
           top_p: 0.9,
         }),
