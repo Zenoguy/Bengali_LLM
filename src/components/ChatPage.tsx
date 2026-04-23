@@ -190,9 +190,10 @@ export default function ChatPage() {
 
     const userPrompt = text;
 
-    // ⏱ Timeout handling
+    // ⏱ Timeout handling - increased to 10 minutes to handle model cold starts
+    // NOTE: This will only work if the backend (Vercel) execution limit is also increased.
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 25000); // 25s timeout
+    const timeoutId = setTimeout(() => controller.abort(), 600000); // 10 minute timeout
 
     try {
       const res = await fetch('/api/generate', {
