@@ -40,9 +40,15 @@ const SUGGESTIONS = {
   ]
 };
 
+function cleanText(text: string | undefined | null): string {
+  if (!text) return "";
+  return text.replace(/\ufffd/g, "").trim();
+}
+
 interface Message {
   role: 'user' | 'ai';
   text: string;
+  isError?: boolean;
 }
 
 interface ChatSession {
@@ -148,6 +154,7 @@ export default function ChatPage() {
   const [loading, setLoading] = useState(false);
   const [isWakingUp, setIsWakingUp] = useState(false);
   const [isSidebarOpen, setSidebarOpen] = useState(false);
+  const [lastPrompt, setLastPrompt] = useState('');
   
   const chatEndRef = useRef<HTMLDivElement>(null);
 
@@ -182,6 +189,7 @@ export default function ChatPage() {
     }));
 
     setInput('');
+    setLastPrompt(text);
     // 300ms delay to avoid flicker for fast responses
     const loaderDelay = setTimeout(() => setLoading(true), 300);
     
@@ -190,20 +198,14 @@ export default function ChatPage() {
 
     const userPrompt = text;
 
-    // ⏱ Timeout handling - increased to 10 minutes to handle model cold starts
-    // NOTE: This will only work if the backend (Vercel) execution limit is also increased.
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 600000); // 10 minute timeout
-
     try {
-      const res = await fetch('/api/generate', {
+      const res = await fetch('https://sam-veda-bengali-llm-space.hf.space/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        signal: controller.signal,
         body: JSON.stringify({
           prompt: `${userPrompt}\nসংক্ষেপে এবং সঠিক তথ্যসহ উত্তর দিন।`,
           system_prompt: 'You are a factual Bengali assistant. Answer only in Bengali. Provide accurate information. Do not hallucinate.',
-          max_new_tokens: 160,
+          max_new_tokens: 96,
           temperature: 0.2,
           top_p: 0.8,
         }),
@@ -215,7 +217,7 @@ export default function ChatPage() {
 
       const data = await res.json();
       
-      const aiText = data.response || data.generated_text || data.output || '⚠️ Empty response from model.';
+      const aiText = cleanText(data.response || data.generated_text || data.output) || '⚠️ Empty response from model.';
 
       setSessions(prev => prev.map(s => {
         if (s.id === activeSessionId) {
@@ -225,19 +227,21 @@ export default function ChatPage() {
       }));
 
     } catch (err: any) {
-      const errorText = err.name === 'AbortError' 
-        ? (lang === 'bn' ? '⚠️ সময় শেষ হয়ে গেছে। মডেলটি সম্ভবত সক্রিয় হচ্ছে, আবার চেষ্টা করুন।' : '⚠️ Request timed out. Model may be waking up, please try again.')
-        : (lang === 'bn' ? '⚠️ মডেলে সংযোগ করা যাচ্ছে না। আবার চেষ্টা করুন।' : '⚠️ Failed to reach model. Try again.');
+      const errorText = lang === 'bn' 
+        ? '⚠️ মডেলে সংযোগ করা যাচ্ছে না। আবার চেষ্টা করুন।' 
+        : '⚠️ Failed to reach model. Try again.';
 
       setSessions(prev => prev.map(s => {
         if (s.id === activeSessionId) {
-          return { ...s, messages: [...s.messages, { role: 'ai', text: errorText }] };
+          return {
+            ...s,
+            messages: [...s.messages, { role: 'ai', text: errorText, isError: true }]
+          };
         }
         return s;
       }));
     } finally {
       clearTimeout(wakeUpTimer);
-      clearTimeout(timeoutId);
       clearTimeout(loaderDelay);
       setLoading(false);
       setIsWakingUp(false);
@@ -454,6 +458,25 @@ export default function ChatPage() {
                     }}>
                       {msg.text}
                     </Typography>
+                    {msg.isError && (
+                      <Button
+                        size="small"
+                        onClick={() => handleSend(lastPrompt)}
+                        variant="outlined"
+                        sx={{
+                          mt: 2,
+                          borderColor: '#B22222',
+                          color: '#B22222',
+                          fontWeight: 700,
+                          fontFamily: 'Hind Siliguri, sans-serif',
+                          textTransform: 'none',
+                          borderRadius: 2,
+                          '&:hover': { background: 'rgba(178,34,34,0.05)', borderColor: '#8B1A1A' }
+                        }}
+                      >
+                        {lang === 'bn' ? 'আবার চেষ্টা করুন' : 'Retry'}
+                      </Button>
+                    )}
                   </Box>
                   <Typography variant="caption" sx={{ mt: 1, mx: 1, color: 'text.secondary', fontWeight: 600, letterSpacing: '0.05em' }}>
                     {msg.role === 'user' ? t('chat_you') : t('chat_ai_name')}
@@ -470,7 +493,7 @@ export default function ChatPage() {
                 {isWakingUp && (
                   <motion.div initial={{ opacity: 0 }} animate={{ opacity: 0.7 }}>
                     <Typography sx={{ textAlign: 'center', fontSize: '0.8rem', color: '#B22222', fontWeight: 600, fontFamily: 'Hind Siliguri, sans-serif' }}>
-                      ⚡ {lang === 'bn' ? 'এটি একটি ডেমো এবং CPU মডেল, তাই ৩ মিনিট পর্যন্ত সময় নিতে পারে' : 'This is a demo and CPU model, so it can take up to 3 mins.'}
+                      ⚡ {lang === 'bn' ? 'এটি অনেক সময় নিতে পারে (CPU মডেল)' : 'This may take several minutes (CPU model).'}
                     </Typography>
                   </motion.div>
                 )}
