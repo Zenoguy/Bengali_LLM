@@ -1,73 +1,61 @@
 name: Warm HF Model (Robust v2)
 
 on:
-schedule:
-- cron: "*/10 * * * *"   # every 10 minutes
-workflow_dispatch:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
 
 jobs:
-warm:
-runs-on: ubuntu-latest
-timeout-minutes: 6
+  warm:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
 
-```
-steps:
-  - name: Warm up Hugging Face /generate endpoint
-    run: |
-      echo "🚀 Starting HF model warm-up..."
+    steps:
+      - name: Warm up Hugging Face /generate endpoint
+        run: |
+          echo "🚀 Starting HF model warm-up..."
 
-      URL="https://sam-veda-bengali-llm-space.hf.space/generate"
+          URL="https://sam-veda-bengali-llm-space.hf.space/generate"
 
-      PAYLOAD='{
-        "prompt": "hi",
-        "system_prompt": "You are a helpful assistant.",
-        "max_new_tokens": 1,
-        "temperature": 0.7,
-        "top_p": 0.9
-      }'
+          PAYLOAD='{"prompt":"hi","system_prompt":"You are a helpful assistant.","max_new_tokens":1,"temperature":0.7,"top_p":0.9}'
 
-      success=false
+          success=false
 
-      # small delay to allow HF container spin-up
-      sleep 5
+          sleep 5
 
-      for i in 1 2 3; do
-        echo "🔁 Attempt $i..."
+          for i in 1 2 3; do
+            echo "🔁 Attempt $i..."
 
-        START_TIME=$(date +%s)
+            START_TIME=$(date +%s)
 
-        HTTP_STATUS=$(curl --max-time 90 -s -o /dev/null -w "%{http_code}" \
-          -L \
-          -X POST "$URL" \
-          -H "Content-Type: application/json" \
-          -H "User-Agent: Mozilla/5.0" \
-          -d "$PAYLOAD")
+            HTTP_STATUS=$(curl --max-time 90 -s -o /dev/null -w "%{http_code}" \
+              -L \
+              -X POST "$URL" \
+              -H "Content-Type: application/json" \
+              -H "User-Agent: Mozilla/5.0" \
+              -d "$PAYLOAD")
 
-        END_TIME=$(date +%s)
-        DURATION=$((END_TIME - START_TIME))
+            END_TIME=$(date +%s)
+            DURATION=$((END_TIME - START_TIME))
 
-        echo "📡 Status: $HTTP_STATUS | ⏱ Took: ${DURATION}s"
+            echo "📡 Status: $HTTP_STATUS | ⏱ Took: ${DURATION}s"
 
-        if [ "$HTTP_STATUS" = "200" ]; then
-          echo "✅ Model warm-up successful"
-          success=true
-          break
+            if [ "$HTTP_STATUS" = "200" ]; then
+              echo "✅ Model warm-up successful"
+              success=true
+              break
+            elif [ "$HTTP_STATUS" = "503" ] || [ "$HTTP_STATUS" = "429" ] || [ "$HTTP_STATUS" = "524" ]; then
+              echo "⚠️ Space waking up or rate-limited. Waiting..."
+              sleep 25
+            else
+              echo "⚠️ Unexpected status ($HTTP_STATUS). Retrying..."
+              sleep 15
+            fi
+          done
 
-        elif [ "$HTTP_STATUS" = "503" ] || [ "$HTTP_STATUS" = "429" ] || [ "$HTTP_STATUS" = "524" ]; then
-          echo "⚠️ Space is waking up or rate-limited. Waiting..."
-          sleep 25
+          if [ "$success" = false ]; then
+            echo "❌ Warm-up failed after all attempts."
+            exit 0
+          fi
 
-        else
-          echo "⚠️ Unexpected status ($HTTP_STATUS). Retrying..."
-          sleep 15
-        fi
-      done
-
-      if [ "$success" = false ]; then
-        echo "❌ Warm-up failed after all attempts."
-        echo "💡 This likely means model is still loading or HF infra delay."
-        exit 0
-      fi
-
-      echo "🔥 Warm-up cycle complete."
-```
+          echo "🔥 Warm-up cycle complete."
