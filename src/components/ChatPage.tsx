@@ -201,11 +201,11 @@ export default function ChatPage() {
         headers: { 'Content-Type': 'application/json' },
         signal: controller.signal,
         body: JSON.stringify({
-          prompt: userPrompt,
-          system_prompt: 'You are a knowledgeable Bengali assistant. Give accurate and complete answers in Bengali. Answer in 3-5 clear sentences. Avoid incomplete responses. Prefer Bengali unless user uses English.',
-          max_new_tokens: 96,
-          temperature: 0.7,
-          top_p: 0.9,
+          prompt: `${userPrompt}\nসংক্ষেপে এবং সঠিক তথ্যসহ উত্তর দিন।`,
+          system_prompt: 'You are a factual Bengali assistant. Answer only in Bengali. Provide accurate information. Do not hallucinate.',
+          max_new_tokens: 160,
+          temperature: 0.2,
+          top_p: 0.8,
         }),
       });
 

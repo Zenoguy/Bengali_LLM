@@ -4,6 +4,13 @@ export default async function handler(req, res) {
   }
 
   try {
+    const body = {
+      ...req.body,
+      max_new_tokens: req.body.max_new_tokens ?? 160,
+      temperature: req.body.temperature ?? 0.2,
+      top_p: req.body.top_p ?? 0.8,
+    };
+
     const hfRes = await fetch(
       "https://sam-veda-bengali-llm-space.hf.space/generate",
       {
@@ -11,7 +18,7 @@ export default async function handler(req, res) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(req.body),
+        body: JSON.stringify(body),
       }
     );
 
@@ -25,8 +32,13 @@ export default async function handler(req, res) {
 
     const data = await hfRes.json();
 
+    function cleanText(text) {
+      if (!text) return "";
+      return text.replace(/\ufffd/g, "").trim();
+    }
+
     res.status(200).json({
-      response: data.response || data.generated_text || data.output,
+      response: cleanText(data.response || data.generated_text || data.output),
     });
 
   } catch (err) {
